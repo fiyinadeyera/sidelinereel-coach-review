@@ -13,3 +13,17 @@ body {
   margin: 0;
   background-color: #0b0f14;
 }
+
+/* Fake-clip playback: a jersey marker runs the pitch while the timeline fills. */
+@keyframes reel-run {
+  0%   { left: 8%;  top: 62%; }
+  20%  { left: 28%; top: 38%; }
+  45%  { left: 50%; top: 66%; }
+  70%  { left: 72%; top: 36%; }
+  100% { left: 92%; top: 54%; }
+}
+
+@keyframes reel-scrub {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
