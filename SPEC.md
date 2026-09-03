@@ -79,3 +79,47 @@ Behavior:
 ## Interaction niceties (build-level, not core spec)
 Keyboard shortcuts on the review screen: `C` confirm, `R` reassign, `Enter` save,
 `Esc` cancel, arrows to move between clips.
+
+---
+
+## Tradeoffs & open questions
+
+Decisions worth defending, and the ones still open. This is the part that matters
+more than the pixels.
+
+**Why only surface low-confidence clips, not every tag.**
+The coach's time is the scarce resource. Reviewing every clip would make the tool a
+chore and train coaches to click through on autopilot, which defeats the point. We
+show only the tags the model isn't sure about, so every decision the coach makes is
+one that actually needed a human. The cost: a high-confidence tag that is wrong still
+slips through. That is an acceptable trade at youth-sports stakes, and it is why the
+confidence threshold is a lever, not a constant.
+
+**Why Confirm / Reassign instead of free-text or a yes/no.**
+Reassign is constrained to the roster because the failure mode is "right team, wrong
+player," not "unknown person." A dropdown of known names makes the correct answer one
+tap away and removes typos, mismatched spellings, and off-roster guesses. Free-text
+would be faster to build and worse to use.
+
+**Why the coach, not a league admin or the parent.**
+The coach is the only person who reliably knows the roster by number on sight, and
+they already have the game context. Pushing verification to parents would scale the
+labor but wreck accuracy and privacy.
+
+**Why decisions are reversible and the flow refuses to finish early.**
+A coach moving fast will misclick. Free back/forward navigation with a visible prior
+decision, plus a hard gate that no reel sends until every flagged clip is decided,
+trades a little speed for the guarantee the product actually sells: no wrong kid's
+highlight reaches a parent.
+
+**What I would instrument if this were real.**
+- Time-per-clip and abandon rate (is the queue too long to finish in one sitting?).
+- Reassign rate by confidence band (is the model's uncertainty well calibrated?).
+- Which jersey-number pairs get confused most (feeds back into the model).
+- Post-send corrections from parents (the tags that got through wrong).
+
+**Open questions.**
+- Batch actions for a coach with 40 flagged clips, or is per-clip review the point?
+- Should a reassignment retrain the tagger, or just fix this one clip?
+- What is the right confidence threshold, and should it adapt per team or per coach?
+- How does this behave with two players sharing lookalike numbers (6/9, 1/7)?

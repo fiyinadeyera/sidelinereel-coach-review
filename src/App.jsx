@@ -23,6 +23,16 @@ function Logo({ className = "" }) {
   )
 }
 
+// Honest label: this is concept work running on mock data.
+function PrototypeChip({ className = "" }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-amber-500/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-amber-300/90 ring-1 ring-amber-500/20 ${className}`}>
+      <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+      Prototype · mock data
+    </span>
+  )
+}
+
 function PlayIcon({ className }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="white">
@@ -173,7 +183,8 @@ function Shell({ step, children }) {
       {/* Sidebar (desktop) */}
       <aside className="hidden w-60 flex-shrink-0 flex-col border-r border-white/5 bg-[#0d1117] px-4 py-6 lg:flex">
         <Logo />
-        <nav className="mt-10 flex flex-col gap-1">
+        <PrototypeChip className="mt-4 self-start" />
+        <nav className="mt-8 flex flex-col gap-1">
           {nav.map((item) => (
             <div
               key={item.key}
@@ -196,10 +207,15 @@ function Shell({ step, children }) {
       </aside>
 
       {/* Top bar (mobile) */}
-      <header className="flex items-center justify-between border-b border-white/5 bg-[#0d1117] px-4 py-3 lg:hidden">
-        <Logo />
-        <div className="grid h-9 w-9 place-items-center rounded-full bg-white/5 text-xs font-bold text-white">
-          CD
+      <header className="lg:hidden">
+        <div className="flex items-center justify-between border-b border-white/5 bg-[#0d1117] px-4 py-3">
+          <Logo />
+          <div className="grid h-9 w-9 place-items-center rounded-full bg-white/5 text-xs font-bold text-white">
+            CD
+          </div>
+        </div>
+        <div className="flex border-b border-white/5 bg-[#0d1117] px-4 pb-2.5">
+          <PrototypeChip />
         </div>
       </header>
 
@@ -213,6 +229,30 @@ function Shell({ step, children }) {
 /* ------------------------------------------------------------------ */
 
 function Dashboard({ clips, onStart }) {
+  // Nothing flagged: the coach is done, so show a calm all-clear instead of an
+  // empty queue and a dead Start button.
+  if (clips.length === 0) {
+    return (
+      <div className="grid min-h-[70vh] place-items-center px-5 py-12">
+        <div className="w-full max-w-sm text-center">
+          <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-green-500/15 ring-1 ring-green-500/30">
+            <svg viewBox="0 0 24 24" className="h-8 w-8 text-green-400" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <h1 className="mt-6 text-2xl font-bold text-white">You're all caught up</h1>
+          <p className="mt-2 text-sm leading-relaxed text-slate-400">
+            No clips flagged for review this week. Every tag cleared confidence, so reels
+            for {TEAM.name} {TEAM.ageGroup} are ready to send.
+          </p>
+          <p className="mt-6 font-mono text-xs uppercase tracking-widest text-slate-600">
+            {TEAM.week} · {TEAM.season}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   const avg = Math.round(clips.reduce((s, c) => s + c.confidence, 0) / clips.length)
   return (
     <div className="mx-auto max-w-3xl px-5 py-8 sm:px-8 sm:py-12">
